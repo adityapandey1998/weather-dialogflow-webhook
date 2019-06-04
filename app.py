@@ -33,7 +33,93 @@ def webhook():
 
 def makeWebhookResult(req):
 	print(req.get('queryResult').get('action'))
+	
 	if req.get('queryResult').get('action') in ['WeatherInfo_context','WeatherInfo']:
+		result = req.get('queryResult')
+		parameters = result.get('parameters')
+		loc = parameters.get('city')
+		time = parameters.get('date')
+		print("Parameters: ",parameters)
+		
+		print(time)
+		time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
+		#print(time_obj)
+		time_in_sec = time_obj.timestamp()
+		print(time_in_sec)
+		
+		try:
+			geolocator = Nominatim(user_agent='adityapandey')
+			location = geolocator.geocode(loc)
+			darksky_api_key = "f71b7245c7fc873eaab6dee321cf5966"
+
+			url = "https://api.darksky.net/forecast/"+darksky_api_key+"/"+str(location.latitude)+","+str(location.longitude)+","+str(int(time_in_sec))
+
+			#location.latitude, location.longitude
+			res = requests.get(url)
+			response = res.json()
+			print(url)
+
+			current = response['currently']['summary']
+			daily = response['daily']['data'][0]['summary']
+			report = ("The Weather Report for the day "+
+				time_obj.strftime("%d %B, %Y") +" in "+loc+" is as follows - "+
+				"\n\nGeneral Weather: "+ current +
+				"\n\nDay's Weather: "+ daily)
+		except:
+			report = "Not Able to obtain request from darksky.net or geoLocator"
+		return  {
+			"fulfillmentText": report,
+			'source' : 'WeatherInfo'
+		}
+
+	elif req.get('queryResult').get('action') in ['TempInfo_context','TempInfo']:
+		result = req.get('queryResult')
+		parameters = result.get('parameters')
+		loc = parameters.get('city')
+		time = parameters.get('date')
+		TempType = parameters.get('TempType')
+		print("Parameters: ",parameters)
+		
+		time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
+		time_in_sec = time_obj.timestamp()
+		print(time_in_sec)
+		
+		try:
+			geolocator = Nominatim(user_agent='adityapandey')
+			location = geolocator.geocode(loc)
+			darksky_api_key = "f71b7245c7fc873eaab6dee321cf5966"
+
+			url = "https://api.darksky.net/forecast/"+darksky_api_key+"/"+str(location.latitude)+","+str(location.longitude)+","+str(int(time_in_sec))
+
+			#location.latitude, location.longitude
+			res = requests.get(url)
+			response = res.json()
+			print(url)
+			if TempType=="maximum":
+				Temp = response['daily']['data'][0]['temperatureHigh']
+				TempTime = response['daily']['data'][0]['temperatureHighTime']
+			elif TempType=="minimum":
+				Temp = response['daily']['data'][0]['temperatureLow']
+				TempTime = response['daily']['data'][0]['temperatureLowTime']
+			elif TempType=="average":
+				Temp = (response['daily']['data'][0]['temperatureHigh'] + response['daily']['data'][0]['temperatureLow'])/2
+			else:
+				Temp = response['currently']['temperature']
+			
+			Humidity = response['daily']['data'][0]['humidity']
+			
+			report = ("The "+TempType+" temp for the day "+
+				time_obj.strftime("%d %B, %Y") +" in "+loc+" is "+
+				+Temp+" deg. Farenheight"+
+				"\n\nHumidity level is: "+ Humidity)
+		except:
+			report = "Not Able to obtain request from darksky.net or geoLocator"
+		return  {
+			"fulfillmentText": report,
+			'source' : 'TempInfo'
+		}
+
+	elif req.get('queryResult').get('action') in ['WeatherTypeInfo_context','WeatherTypeInfo']:
 		result = req.get('queryResult')
 		parameters = result.get('parameters')
 		loc = parameters.get('city')
@@ -70,6 +156,12 @@ def makeWebhookResult(req):
 		return  {
 			"fulfillmentText": report,
 			'source' : 'WeatherInfo'
+		}
+
+	else:
+		return  {
+			"fulfillmentText": "Action not coded yet",
+			'source' : 'UnknownAction'
 		}
 
 if __name__ == '__main__':
