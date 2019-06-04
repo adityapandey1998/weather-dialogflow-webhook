@@ -84,36 +84,34 @@ def makeWebhookResult(req):
 		time_in_sec = time_obj.timestamp()
 		print(time_in_sec)
 		
-		try:
-			geolocator = Nominatim(user_agent='adityapandey')
-			location = geolocator.geocode(loc)
-			darksky_api_key = "f71b7245c7fc873eaab6dee321cf5966"
+		geolocator = Nominatim(user_agent='adityapandey')
+		location = geolocator.geocode(loc)
+		darksky_api_key = "f71b7245c7fc873eaab6dee321cf5966"
 
-			url = "https://api.darksky.net/forecast/"+darksky_api_key+"/"+str(location.latitude)+","+str(location.longitude)+","+str(int(time_in_sec))
+		url = "https://api.darksky.net/forecast/"+darksky_api_key+"/"+str(location.latitude)+","+str(location.longitude)+","+str(int(time_in_sec))
 
-			#location.latitude, location.longitude
-			res = requests.get(url)
-			response = res.json()
-			print(url)
-			if TempType=="maximum":
-				Temp = response['daily']['data'][0]['temperatureHigh']
-				TempTime = response['daily']['data'][0]['temperatureHighTime']
-			elif TempType=="minimum":
-				Temp = response['daily']['data'][0]['temperatureLow']
-				TempTime = response['daily']['data'][0]['temperatureLowTime']
-			elif TempType=="average":
-				Temp = (response['daily']['data'][0]['temperatureHigh'] + response['daily']['data'][0]['temperatureLow'])/2
-			else:
-				Temp = response['currently']['temperature']
-			
-			Humidity = response['daily']['data'][0]['humidity']
-			
-			report = ("The "+TempType+" temp for the day "+
-				time_obj.strftime("%d %B, %Y") +" in "+loc+" is "+
-				+Temp+" deg. Farenheight"+
-				"\n\nHumidity level is: "+ Humidity)
-		except:
-			report = "Not Able to obtain request from darksky.net or geoLocator"
+		#location.latitude, location.longitude
+		res = requests.get(url)
+		response = res.json()
+		print(url)
+		if TempType=="maximum":
+			Temp = response['daily']['data'][0]['temperatureHigh']
+			TempTime = response['daily']['data'][0]['temperatureHighTime']
+		elif TempType=="minimum":
+			Temp = response['daily']['data'][0]['temperatureLow']
+			TempTime = response['daily']['data'][0]['temperatureLowTime']
+		elif TempType=="average":
+			Temp = (response['daily']['data'][0]['temperatureHigh'] + response['daily']['data'][0]['temperatureLow'])/2
+		else:
+			Temp = response['currently']['temperature']
+		print(Temp)
+		Humidity = response['daily']['data'][0]['humidity']
+		print(Humidity)
+		report = ("The "+TempType+" temp for the day "+
+			time_obj.strftime("%d %B, %Y") +" in "+loc+" is "+
+			+Temp+" deg. Farenheight"+
+			"\n\nHumidity level is: "+ Humidity)
+
 		return  {
 			"fulfillmentText": report,
 			'source' : 'TempInfo'
