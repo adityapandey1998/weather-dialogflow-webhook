@@ -41,26 +41,27 @@ def makeWebhookResult(req):
 
 		time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
 		time_in_sec = time_obj.total_seconds()
+		
+		try:
+			geolocator = Nominatim(user_agent='adityapandey')
+			location = geolocator.geocode(loc)
+			darksky_api_key = "f71b7245c7fc873eaab6dee321cf5966"
 
-		geolocator = Nominatim(user_agent='adityapandey')
-		location = geolocator.geocode(loc)
-		darksky_api_key = "f71b7245c7fc873eaab6dee321cf5966"
+			url = "https://api.darksky.net/forecast/"+darksky_api_key+"/"+str(location.latitude)+","+str(location.longitude)+","+str(int(time_in_sec))
 
-		url = "https://api.darksky.net/forecast/"+darksky_api_key+"/"+str(location.latitude)+","+str(location.longitude)+","+str(int(time_in_sec))
+			#location.latitude, location.longitude
+			res = requests.get(url)
+			response = res.json()
+			print(url)
 
-		#location.latitude, location.longitude
-		res = requests.get(url)
-		response = res.json()
-		print(url)
-
-		current = response['currently']['summary']
-		daily = response['daily']['data'][0]['summary']
-
-		report = ("The Weather Report for the day "+
-			time_obj.strftime("%d %B, %Y") +" in "+loc+" is as follows - \n"+
+			current = response['currently']['summary']
+			daily = response['daily']['data'][0]['summary']
+			report = ("The Weather Report for the day "+
+				time_obj.strftime("%d %B, %Y") +" in "+loc+" is as follows - \n"+
 				"General Weather: "+ current +
 				"\nDay's Weather: "+ daily)
-
+		except:
+			report = "Not Able to obtain request from darksky.net or geoLocator"
 		return  {
 			"fulfillmentText": report,
 			'source' : 'InterestRate'
