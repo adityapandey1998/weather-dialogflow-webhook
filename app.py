@@ -28,20 +28,16 @@ def webhook():
 	return r
 
 def makeWebhookResult(req):
-	#if req.get('result').get('action')!='interest':
-	#	return
-	#result = req.get('result')
-	#parameters = result.get('parameters')
-	#speech ="The interest rate of "
-
-	#print('Response:')
-	#print(speech)
-
-	return  {
-		"fulfillmentText": "hello",
-		'source' : 'InterestRate'
-	}
-
+	if req.get('queryResult').get('action') in ['WeatherInfo_context','WeatherInfo']:
+		#result = req.get('queryResult')
+		#parameters = result.get('parameters')
+		#speech ="The interest rate of "
+		#print('Response:')
+		#print(speech)
+		return  {
+			"fulfillmentText": "Weather Information",
+			'source' : 'InterestRate'
+		}
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
