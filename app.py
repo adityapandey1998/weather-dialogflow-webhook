@@ -12,33 +12,37 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
-@app.route('/test', methods=['GET'])
-def test():
-	return "Hi, there"
-
-
 @app.route('/webhook', methods=['POST'])
+
 def webhook():
 	req = request.get_json(silent=True, force=True)
-	print("Request:")
+	print("Request = ")
 	print(json.dumps(req, indent=4))
-	res = processRequest(req)
-	# print(res)
-	r = make_response(res)
+	res = makeWebhookResult(req)
+
+	res = json.dumps(res, indent=4)
+	print(res)
+	r=make_response(res)
 	r.headers['Content-Type'] = 'application/json'
+	
 	return r
 
-
-def processRequest(req):
+def makeWebhookResult(req):
+	if req.get('result').get('action')!='interest':
+		return
 	result = req.get('result')
 	parameters = result.get('parameters')
-	speech ="This is a response from the webhook"
+	speech ="The interest rate of "
+
 	print('Response:')
 	print(speech)
+
 	return  {
 		'speech': speech,
-		'fulfillmentText': speech
+		"fulfillmentText": speech,
+		'source' : 'InterestRate'
 	}
+
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
