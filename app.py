@@ -32,12 +32,13 @@ def webhook():
 	return r
 
 def makeWebhookResult(req):
+	print(req.get('queryResult').get('action'))
 	if req.get('queryResult').get('action') in ['WeatherInfo_context','WeatherInfo']:
 		result = req.get('queryResult')
 		parameters = result.get('parameters')
-		loc = parameters['city']
-		time = parameters['date']
-		duration = parameters['date-period']
+		loc = parameters.get('city')
+		time = parameters.get('date')
+		duration = parameters.get('date-period')
 
 		time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
 		time_in_sec = time_obj.total_seconds()
