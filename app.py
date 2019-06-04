@@ -109,7 +109,7 @@ def makeWebhookResult(req):
 			print(Humidity)
 			report = ("The "+TempType+" temp for the day "+
 				time_obj.strftime("%d %B, %Y") +" in "+loc+" is "+
-				+str(Temp)+" deg. Farenheight"+
+				str(Temp)+" deg. Farenheight"+
 				"\n\nHumidity level is: "+ str(Humidity))
 			
 		except:
