@@ -43,12 +43,9 @@ def makeWebhookResult(req):
 		
 		print(time)
 		time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
-		print(time_obj)
-		time_in_sec = time_obj.total_seconds()
+		#print(time_obj)
+		time_in_sec = time_obj.timestamp()
 		print(time_in_sec)
-		
-		print(time_obj, time_in_sec)
-		print("Till Try")
 		
 		try:
 			geolocator = Nominatim(user_agent='adityapandey')
