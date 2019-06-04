@@ -31,15 +31,14 @@ def webhook():
 def processRequest(req):
 	result = req.get('result')
 	parameters = result.get('parameters')
-	if req.get("result").get("action") != "yahooWeatherForecast":
-		speech ="This is a response from the webhook"
-		print('Response:')
-		print(speech)
+	speech ="This is a response from the webhook"
+	print('Response:')
+	print(speech)
 
-		return  {
-			'speech': speech,
-			'fulfillmentText': speech
-		}
+	return  {
+		'speech': speech,
+		'fulfillmentText': speech
+	}
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
