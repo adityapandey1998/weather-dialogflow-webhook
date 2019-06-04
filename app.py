@@ -6,7 +6,7 @@ import os
 
 from flask import Flask
 from flask import request
-from flask import make_response
+from flask import make_response, jsonify
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -20,17 +20,15 @@ def webhook():
     print(json.dumps(req, indent=4))
 
     res = processRequest(req)
-
-    res = json.dumps(res, indent=4)
     # print(res)
-    r = make_response(res)
+    r = make_response(jsonify(res))
     r.headers['Content-Type'] = 'application/json'
     return r
 
 
 def processRequest(req):
-	result = req.get('result')
-	parameters = result.get('parameters')
+	#result = req.get('result')
+	#parameters = result.get('parameters')
 	speech ="This is a response from the webhook"
 	print('Response:')
 	print(speech)
