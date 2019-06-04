@@ -21,7 +21,7 @@ app = Flask(__name__)
 def webhook():
 	req = request.get_json(silent=True, force=True)
 	print("Request = ")
-	print(json.dumps(req, indent=4))
+	#print(json.dumps(req, indent=4))
 	res = makeWebhookResult(req)
 
 	res = json.dumps(res, indent=4)
@@ -41,6 +41,8 @@ def makeWebhookResult(req):
 
 		time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
 		time_in_sec = time_obj.total_seconds()
+		
+		print("Till Try")
 		
 		try:
 			geolocator = Nominatim(user_agent='adityapandey')
@@ -64,7 +66,7 @@ def makeWebhookResult(req):
 			report = "Not Able to obtain request from darksky.net or geoLocator"
 		return  {
 			"fulfillmentText": report,
-			'source' : 'InterestRate'
+			'source' : 'WeatherInfo'
 		}
 
 if __name__ == '__main__':
