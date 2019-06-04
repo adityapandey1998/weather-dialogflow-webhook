@@ -37,7 +37,7 @@ def processRequest(req):
 
 	return  {
 		'speech': speech,
-		'fulfillmentText': speech
+		'displayText': speech
 	}
 
 if __name__ == '__main__':
