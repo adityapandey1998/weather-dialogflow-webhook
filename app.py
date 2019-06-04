@@ -41,8 +41,11 @@ def makeWebhookResult(req):
 		duration = parameters.get('date-period')
 		print("Parameters: ",parameters)
 		
+		print(time)
 		time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
+		print(time_obj)
 		time_in_sec = time_obj.total_seconds()
+		print(time_in_sec)
 		
 		print(time_obj, time_in_sec)
 		print("Till Try")
