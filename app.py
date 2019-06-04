@@ -11,6 +11,10 @@ from flask import make_response, jsonify
 # Flask app should start in global layout
 app = Flask(__name__)
 
+@app.route('/test', methods=['GET'])
+def test():
+	return "Hi, there"
+
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
