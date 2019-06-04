@@ -28,18 +28,17 @@ def webhook():
 	return r
 
 def makeWebhookResult(req):
-	if req.get('result').get('action')!='interest':
-		return
-	result = req.get('result')
-	parameters = result.get('parameters')
-	speech ="The interest rate of "
+	#if req.get('result').get('action')!='interest':
+	#	return
+	#result = req.get('result')
+	#parameters = result.get('parameters')
+	#speech ="The interest rate of "
 
-	print('Response:')
-	print(speech)
+	#print('Response:')
+	#print(speech)
 
 	return  {
-		'speech': speech,
-		"fulfillmentText": speech,
+		"fulfillmentText": "hello",
 		'source' : 'InterestRate'
 	}
 
