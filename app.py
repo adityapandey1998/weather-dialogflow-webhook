@@ -18,11 +18,10 @@ def test():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    #req = request.get_json(silent=True, force=True)
+    req = request.get_json(silent=True, force=True)
 
-    #print("Request:")
-    #print(json.dumps(req, indent=4))
-    req = {}
+    print("Request:")
+    print(json.dumps(req, indent=4))
     res = processRequest(req)
     # print(res)
     r = make_response(jsonify(res))
@@ -31,16 +30,13 @@ def webhook():
 
 
 def processRequest(req):
-	#result = req.get('result')
-	#parameters = result.get('parameters')
+	result = req.get('result')
+	parameters = result.get('parameters')
 	speech ="This is a response from the webhook"
-	print('Response:')
-	print(speech)
-
-	return  {
-		'speech': speech,
-		'displayText': speech
-	}
+	
+	req['fulfillmentText']=speech
+	
+	return req
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
