@@ -1,3 +1,4 @@
+    
 #!/usr/bin/env python
 
 import urllib
@@ -22,6 +23,7 @@ def webhook():
 
     print("Request:")
     print(json.dumps(req, indent=4))
+    
     res = processRequest(req)
     # print(res)
     r = make_response(jsonify(res))
@@ -33,10 +35,13 @@ def processRequest(req):
 	result = req.get('result')
 	parameters = result.get('parameters')
 	speech ="This is a response from the webhook"
-	
-	req['fulfillmentText']=speech
-	
-	return req
+	print('Response:')
+	print(speech)
+
+	return  {
+		'speech': speech,
+		'displayText': speech
+	}
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
