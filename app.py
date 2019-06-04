@@ -18,11 +18,11 @@ def test():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    req = request.get_json(silent=True, force=True)
+    #req = request.get_json(silent=True, force=True)
 
-    print("Request:")
-    print(json.dumps(req, indent=4))
-
+    #print("Request:")
+    #print(json.dumps(req, indent=4))
+    req = {}
     res = processRequest(req)
     # print(res)
     r = make_response(jsonify(res))
