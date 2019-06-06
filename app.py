@@ -149,6 +149,7 @@ def makeWebhookResult(req):
 			print(url)
 
 			icon = response['daily']['icon']
+			print(icon)
 
 			if icon in ["rain","sleet"]:
 				weatherTypeActual = "rainy"
@@ -171,12 +172,14 @@ def makeWebhookResult(req):
 			else: 
 				weatherTypeActual = "Couldn't be determined"
 
+			print(weatherTypeActual)
+
 			if weatherTypeActual == weatherType:
 				report = "Yes"
 			else:
 				report = "No"
 
-			
+			print("Report yes/no done")
 			report = (report + ", the Weather Report for the day "+
 				time_obj.strftime("%d %B, %Y") +" in "+loc+" says that the day is expected/was \n"+
 				weatherTypeActual)
