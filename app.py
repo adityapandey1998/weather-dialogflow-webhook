@@ -63,8 +63,8 @@ def makeWebhookResult(req):
 			daily = response['daily']['data'][0]['summary']
 			report = ("The Weather Report for the day "+
 				time_obj.strftime("%d %B, %Y") +" in "+loc+" is as follows - "+
-				"\n\nGeneral Weather: "+ current +
-				"\n\nDay's Weather: "+ daily)
+				"'\n'General Weather: "+ current +
+				"'\n'Day's Weather: "+ daily)
 		except:
 			report = "Not Able to obtain request from darksky.net or geoLocator"
 		return  {
@@ -110,7 +110,7 @@ def makeWebhookResult(req):
 			report = ("The "+TempType+" temp for the day "+
 				time_obj.strftime("%d %B, %Y") +" in "+loc+" is "+
 				str(Temp)+" deg. Farenheight"+
-				"\n\nHumidity level is: "+ str(Humidity))
+				"'\n'Humidity level is: "+ str(Humidity))
 			
 		except:
 			report = "Not Able to obtain request from darksky.net or geoLocator"
@@ -181,7 +181,7 @@ def makeWebhookResult(req):
 
 			
 			report = (report + ", the Weather Report for the day "+
-				time_obj.strftime("%d %B, %Y") +" in "+loc+" says that the day is expected/was \n"+
+				time_obj.strftime("%d %B, %Y") +" in "+loc+" says that the day is expected/was '\n"+
 				weatherTypeActual)
 		except:
 			report = "Not Able to obtain request from darksky.net or geoLocator"
