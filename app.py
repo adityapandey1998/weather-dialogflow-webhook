@@ -136,55 +136,55 @@ def makeWebhookResult(req):
 		time_in_sec = time_obj.timestamp()
 		print(time_in_sec)
 		
-		#try:
-		geolocator = Nominatim(user_agent='adityapandey')
-		location = geolocator.geocode(loc)
-		darksky_api_key = "f71b7245c7fc873eaab6dee321cf5966"
+		try:
+			geolocator = Nominatim(user_agent='adityapandey')
+			location = geolocator.geocode(loc)
+			darksky_api_key = "f71b7245c7fc873eaab6dee321cf5966"
 
-		url = "https://api.darksky.net/forecast/"+darksky_api_key+"/"+str(location.latitude)+","+str(location.longitude)+","+str(int(time_in_sec))
+			url = "https://api.darksky.net/forecast/"+darksky_api_key+"/"+str(location.latitude)+","+str(location.longitude)+","+str(int(time_in_sec))
 
-		#location.latitude, location.longitude
-		res = requests.get(url)
-		response = res.json()
-		print(url)
+			#location.latitude, location.longitude
+			res = requests.get(url)
+			response = res.json()
+			print(url)
 
-		icon = response['daily']['icon']
-		print(icon)
+			icon = response['daily']['data'][0]['icon']
+			print(icon)
 
-		if icon in ["rain","sleet"]:
-			weatherTypeActual = "rainy"
+			if icon in ["rain","sleet"]:
+				weatherTypeActual = "rainy"
+			
+			elif icon in ["wind"]:
+				weatherTypeActual = "windy"
 
-		elif icon in ["wind"]:
-			weatherTypeActual = "windy"
+			elif icon in ["clear-day", "clear-night"]:
+				weatherTypeActual = "clear and sunny"
+			
+			elif icon in ["cloudy", "partly-cloudy-day", "partly-cloudy-night"]:
+				weatherTypeActual = "cloudy"
+			
+			elif icon in ["snow"]:
+				weatherTypeActual = "snow"
+			
+			elif icon in ["fog"]:
+				weatherTypeActual = "cold"
 
-		elif icon in ["clear-day", "clear-night"]:
-			weatherTypeActual = "clear and sunny"
+			else: 
+				weatherTypeActual = "Couldn't be determined"
 
-		elif icon in ["cloudy", "partly-cloudy-day", "partly-cloudy-night"]:
-			weatherTypeActual = "cloudy"
+			print(weatherTypeActual)
 
-		elif icon in ["snow"]:
-			weatherTypeActual = "snow"
+			if weatherTypeActual == weatherType:
+				report = "Yes"
+			else:
+				report = "No"
 
-		elif icon in ["fog"]:
-			weatherTypeActual = "cold"
-
-		else: 
-			weatherTypeActual = "Couldn't be determined"
-
-		print(weatherTypeActual)
-
-		if weatherTypeActual == weatherType:
-			report = "Yes"
-		else:
-			report = "No"
-
-		print("Report yes/no done")
-		report = (report + ", the Weather Report for the day "+
-			time_obj.strftime("%d %B, %Y") +" in "+loc+" says that the day is expected/was \n"+
-			weatherTypeActual)
-		#except:
-		#	report = "Not Able to obtain request from darksky.net or geoLocator"
+			
+			report = (report + ", the Weather Report for the day "+
+				time_obj.strftime("%d %B, %Y") +" in "+loc+" says that the day is expected/was \n"+
+				weatherTypeActual)
+		except:
+			report = "Not Able to obtain request from darksky.net or geoLocator"
 		return  {
 			"fulfillmentText": report,
 			'source' : 'WeatherTypeInfo'
