@@ -125,7 +125,10 @@ def makeWebhookResult(req):
 		loc = parameters.get('city')
 		time = parameters.get('date')
 		duration = parameters.get('date-period')
+		weatherType = parameters.get('WeatherType')
 		print("Parameters: ",parameters)
+
+		weatherTypeOptions = ["clear and sunny", "cloudy", "cold", "rainy", "windy", "snow", "sunny"]
 		
 		print(time)
 		time_obj = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S%z')
@@ -145,17 +148,43 @@ def makeWebhookResult(req):
 			response = res.json()
 			print(url)
 
-			current = response['currently']['summary']
-			daily = response['daily']['data'][0]['summary']
-			report = ("The Weather Report for the day "+
-				time_obj.strftime("%d %B, %Y") +" in "+loc+" is as follows - \n"+
-				"General Weather: "+ current +
-				"\nDay's Weather: "+ daily)
+			icon = response['daily']['icon']
+
+			if icon in ["rain","sleet"]:
+				weatherTypeActual = "rainy"
+			
+			elif icon in ["wind"]:
+				weatherTypeActual = "windy"
+
+			elif icon in ["clear-day", "clear-night"]:
+				weatherTypeActual = "clear and sunny"
+			
+			elif icon in ["cloudy", "partly-cloudy-day", "partly-cloudy-night"]:
+				weatherTypeActual = "cloudy"
+			
+			elif icon in ["snow"]:
+				weatherTypeActual = "snow"
+			
+			elif icon in ["fog"]:
+				weatherTypeActual = "cold"
+
+			else: 
+				weatherTypeActual = "Couldn't be determined"
+
+			if weatherTypeActual == weatherType:
+				report = "Yes"
+			else:
+				report = "No"
+
+			
+			report = (report + ", the Weather Report for the day "+
+				time_obj.strftime("%d %B, %Y") +" in "+loc+" says that the day is expected/was \n"+
+				weatherTypeActual)
 		except:
 			report = "Not Able to obtain request from darksky.net or geoLocator"
 		return  {
 			"fulfillmentText": report,
-			'source' : 'WeatherInfo'
+			'source' : 'WeatherTypeInfo'
 		}
 
 	else:
