@@ -72,7 +72,7 @@ def makeWebhookResult(req):
 			'source' : 'WeatherInfo'
 		}
 
-	elif req.get('queryResult').get('action') in ['TempInfo_context','TempInfo']:
+	elif req.get('queryResult').get('action') in ['TempInfo_context','TempInfo','TempInfo_followup']:
 		result = req.get('queryResult')
 		parameters = result.get('parameters')
 		loc = parameters.get('city')
